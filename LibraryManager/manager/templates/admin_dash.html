@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %} Admin Dashboard {% endblock %}
+
+{% block content %}
+    <style>
+        .page-container {
+            height: 80vh;
+            overflow-y: auto;
+        }
+
+        .reservation-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .reservation-table th,
+        .reservation-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .reservation-table th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+
+        .reservation-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .reservation-table tr:hover {
+            background-color: #ddd;
+        }
+
+        .button-container {
+            margin-top: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .button-container a {
+            margin: 0 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .button-container a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+    <div class="page-container">
+        <div class="button-container">
+            <a href="{% url 'top_10' %}">Top 10</a>
+            <a href="{% url 'top-late-books' %}">Top Late Books</a>
+            <a href="{% url 'top-late-users' %}">Top Late users</a>
+        </div>
+
+        <h1>Reservation List</h1>
+        <table class="reservation-table">
+            <thead>
+                <tr>
+                    <th>Reservation ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Book</th>
+                    <th>Reserve Date</th>
+                    <th>Return Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reservation in data %}
+                <tr>
+                    <td>
+                        {% if reservation.status == "On Loan" %}
+                            <a href="{% url 'return_book' reservation.id %}">{{ reservation.id }}</a>
+                        {% else %}
+                            {{ reservation.id }}
+                        {% endif %}
+                    </td>
+                    <td>{{ reservation.name }}</td>
+                    <td>{{ reservation.email }}</td>
+                    <td>{{ reservation.book.title }}</td>
+                    <td>{{ reservation.reserve_date }}</td>
+                    <td>{{ reservation.return_date }}</td>
+                    <td>{{ reservation.status }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7">No reservations found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="button-container">
+        <a href="{% url 'book_take_out' %}">Take Out Book</a>
+    </div>
+{% endblock %}

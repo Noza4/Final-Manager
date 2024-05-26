@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %} Home Page {% endblock %}
+
+{% block content %}
+<style>
+    .pagination {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .pagination .step-links a {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: #fff;
+        border: 1px solid #007bff;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .pagination .step-links a:hover {
+        background-color: #0056b3;
+    }
+
+    .pagination .current {
+        margin-bottom: 20px;
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: #6c757d;
+        color: #fff;
+        border: 1px solid #6c757d;
+        border-radius: 4px;
+        text-decoration: none;
+    }
+
+    .book-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        margin-top: 20px;
+        gap: 20px;
+    }
+
+    .book {
+        margin-left: 25px;
+        background-color: #f9f9f9;
+        border: 1px solid black;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        text-align: center;
+        width: 200px;
+        height: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        transition: background-color 0.3s ease;
+    }
+
+    .book img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .book:hover {
+        background-color: #ddd;
+    }
+
+    .book-title {
+        font-size: 22px;
+        font-weight: bold;
+        margin: 10px 0;
+        letter-spacing: 1px;
+    }
+
+    .book-link {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    main {
+        flex-grow: 1;
+    }
+
+    footer {
+        margin-top: auto;
+    }
+
+    .search-filter-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-top: 10px;
+        padding: 20px;
+        background-color: #f4f4f4;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+    }
+
+    .search-filter-container form {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+    }
+
+    .search-filter-container .filter-options {
+        display: flex;
+        flex-direction: column;
+        margin-left: 20px;
+    }
+
+    .search-filter-container h4 {
+        margin-top: 0;
+    }
+</style>
+
+<main>
+    <div class="search-filter-container">
+        <!-- Combined search and filter form -->
+        <form action="{% url 'home' %}" method="GET">
+            <input type="text" name="query" placeholder="Search..." style="margin-right: 20px;">
+            <div class="filter-options">
+                <select name="genre" style="margin-bottom: 10px;">
+                    <option value="">Select Genre</option>
+                    {% for genre in genres %}
+                    <option value="{{ genre.id }}">{{ genre.genre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-options">
+                <select name="author" style="margin-bottom: 10px;">
+                    <option value="">Select Author</option>
+                    {% for author in authors %}
+                    <option value="{{author.id}}">{{author.author}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" style="margin-left: 20px; margin-bottom: 10px;">Apply Filters</button>
+        </form>
+    </div>
+
+    <div class="book-container">
+        {% for book in page_obj %}
+        <a href="{% url 'get_book' book.id %}" class="book-link">
+            <div class="book">
+                <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                <h3>{{ book.title }}</h3>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</main>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}

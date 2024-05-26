@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Library{% endblock %}</title>
+    {% block script %} {% endblock %}
+    <style>
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            color: #fff;
+            padding: 30px;
+        }
+
+        .logo {
+            letter-spacing: 2px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 20px;
+        }
+
+        .nav-links .active {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .contact-info {
+            margin-bottom: 10px;
+        }
+
+        .author-credentials {
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .portfolio-link {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        .disabled-link {
+            color: #999;
+            pointer-events: none;
+            cursor: default;
+            text-decoration: none;
+        }
+
+        form {
+            margin-left: 20px;
+            padding: 1px;
+            margin-top: 10px;
+            flex: 1;
+        }
+
+        input[type="text"], select {
+            padding: 8px;
+            font-size: 14px;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            flex: 1;
+            margin-bottom: 10px;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav>
+        <div class="logo">Library</div>
+
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+            {% if user.is_staff %}
+                <a href="{% url 'admin_dash' %}">Dashboard</a>
+                <a href="{% url 'add' %}">Add</a>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="{% if request.path == '/login/' %}active{% endif %}">Login</a>
+            {% endif %}
+
+        </div>
+    </nav>
+</header>
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<footer>
+    <div class="author-credentials">
+        Website created by Nikoloz Nozadze
+    </div>
+    <div class="contact-info">
+        Contact us: nikanozadze166@gmail.com
+    </div>
+    <div class="portfolio-link">
+        <a href="https://github.com/Noza4">Visit Developer's Portfolio</a>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %} Return Book {% endblock %}
+
+{% block content %}
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f2f5;
+        }
+
+        .return-box {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+
+        .detail-label {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+
+        .return-detail {
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+<body>
+    <div class="container">
+        <div class="return-box">
+            <h1>Return Book</h1>
+            <div class="return-detail">
+                <p class="detail-label">Name:</p>
+                <p>{{ reservation.name }}</p>
+                <p class="detail-label">Email:</p>
+                <p>{{ reservation.email }}</p>
+                <p class="detail-label">Book:</p>
+                <p>{{ reservation.book }}</p>
+                <p class="detail-label">Reserved Date:</p>
+                <p>{{ reservation.reserve_date }}</p>
+                <p class="detail-label">Return Date:</p>
+                <p>{{ reservation.return_date }}</p>
+                <p class="detail-label">Status:</p>
+                <p>{{ reservation.status }}</p>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit">Return Book</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+{% endblock %}

@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %} {{ book.title }} {% endblock %}
+
+{% block content %}
+<style>
+     .page-container {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .content {
+        margin-top: 50px;
+        flex: 1;
+    }
+
+    .footer {
+        background-color: #f8f9fa;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .book-detail-container {
+        display: flex;
+        align-items: flex-start;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .book-image {
+        max-width: 300px;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .book-details {
+        flex: 1;
+    }
+
+    .book-title {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #333;
+        text-transform: uppercase;
+    }
+
+    .title-line {
+        width: 100%;
+        height: 2px;
+        background-color: #000;
+        margin-bottom: 10px;
+    }
+
+    .book-author {
+        font-size: 18px;
+        margin-bottom: 5px;
+        color: #666;
+        font-style: italic;
+    }
+
+    .book-genre {
+        font-size: 18px;
+        margin-bottom: 5px;
+        color: #666;
+        font-style: italic;
+    }
+
+    .book-publication {
+        font-size: 18px;
+        margin-top: 10px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .book-stock {
+        font-size: 18px;
+        margin-top: 10px;
+        font-weight: bold;
+        color: green;
+    }
+
+    .out-of-stock {
+        color: red;
+    }
+
+
+    .reservation-button {
+        text-decoration: none;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-right: 10px;
+    }
+
+    .reservation-button:hover {
+        background-color: #0056b3;
+    }
+
+
+    .additional-button {
+        text-decoration: none;
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .additional-button:hover {
+        background-color: #218838;
+    }
+</style>
+
+<div class="page-container">
+    <div class="content">
+        <div class="book-detail-container">
+            <div>
+                <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-image">
+            </div>
+            <div class="book-details">
+                <h2 class="book-title">{{ book.title }}</h2>
+                <div class="title-line"></div>
+
+                <p class="book-author">Authors:
+                    {% for author in book.author.all %}
+                    <strong>{{ author.author }}</strong>
+                        {% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+                <p class="book-genre">Genres:
+                    {% for genre in book.genre.all %}
+                    <strong>{{ genre.genre }}</strong>
+                        {% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+                <p class="book-publication">Publication Date: {{ book.publication_date }}</p>
+
+
+                <p class="book-stock">Stock: {{ book.stock }}</p>
+
+                <a href="{% url 'reservation' book.id %}" class="reservation-button">Make a Reservation</a>
+
+                {% if user.is_staff %}
+
+                    <a href="{% url 'update' book.id %}" class="additional-button">Update</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
